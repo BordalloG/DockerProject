@@ -1,0 +1,13 @@
+{
+  "name": "consumer_app",
+  "version": "1.0.0",
+  "description": "RabbitMq consumer using Node.js on Docker",
+  "author": "Guilherme Bordallo",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.1"
+  }
+}
