@@ -11,7 +11,7 @@ namespace dotnetKafkaConsumer
             var conf = new ConsumerConfig
             {
                 GroupId = "test-consumer-group",
-                BootstrapServers = "localhost:9092",
+                BootstrapServers = "PLAINTEXT://kafka:9092",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
@@ -26,10 +26,11 @@ namespace dotnetKafkaConsumer
 
             try
             {
+                Console.WriteLine("Ready to Consume events:");
                 while (true)
                 {
                     var cr = c.Consume(cts.Token);
-                    Console.WriteLine($"Consumed message:\n'{cr.Value}'\nfrom topic {cr.Topic}, partition {cr.Partition}, offset {cr.Offset}");
+                    Console.WriteLine($"Consumed message:\n'{cr.Message.Value}'\nfrom topic {cr.Topic}, partition {cr.Partition}, offset {cr.Offset}");
                 }
             }
             catch (OperationCanceledException)
