@@ -40,6 +40,8 @@ services:
     image: kconsumer
     networks: 
       - broker-kafka
+    depends_on: 
+      - kafka
 
 networks: 
   broker-kafka:
