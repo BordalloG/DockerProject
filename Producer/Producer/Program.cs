@@ -1,43 +1,35 @@
 ﻿using Confluent.Kafka;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Producer
 {
     class Program
     {
-        static void Main(string[] args)
+        public static async Task Main()
         {
-            var conf = new ConsumerConfig
+            Thread.Sleep(5000);
+            var config = new ProducerConfig
             {
-                GroupId = "test-consumer-group",
-                BootstrapServers = "PLAINTEXT://kafka:9092",
-                AutoOffsetReset = AutoOffsetReset.Earliest
+                BootstrapServers = "kafka:9092"
             };
 
-            using var c = new ConsumerBuilder<Ignore, string>(conf).Build();
-            c.Subscribe("quickstart-events");
-
-            var cts = new CancellationTokenSource();
-            Console.CancelKeyPress += (_, e) => {
-                e.Cancel = true;
-                cts.Cancel();
-            };
-
-            try
+            using var p = new ProducerBuilder<Null, string>(config).Build();
+            var counter = 0;
+            while (true)
             {
-                while (true)
+                var text = "Mensagem: " + counter;
+                counter++;
+                var message = new Message<Null, string>
                 {
-                    var cr = c.Consume(cts.Token);
-                    Console.WriteLine($"Consumed message:\n'{cr.Message.Value}'\nfrom topic {cr.Topic}, partition {cr.Partition}, offset {cr.Offset}");
-                }
-            }
-            catch (OperationCanceledException)
-            {
-            }
-            finally
-            {
-                c.Close();
+                    Value = text
+                };
+
+                var dr = await p.ProduceAsync("quickstart-events", message);
+                Console.WriteLine($"Produced message '{dr.Value}' to topic {dr.Topic}, partition {dr.Partition}, offset {dr.Offset}");
+
+                Thread.Sleep(5000);
             }
         }
     }

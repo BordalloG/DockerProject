@@ -1,10 +1,8 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1
 
-EXPOSE 9092
-
 WORKDIR /app 
 
-COPY dotnetKafkaConsumer ./
+COPY Producer ./
 
 RUN dotnet restore
 
@@ -12,4 +10,4 @@ COPY . ./
 
 RUN dotnet publish -c Release -o out
 
-ENTRYPOINT ["dotnet", "out/dotnetKafkaConsumer.dll"]
+ENTRYPOINT ["dotnet", "out/Producer.dll"]

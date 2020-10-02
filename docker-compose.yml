@@ -36,12 +36,19 @@ services:
     environment:
       KAFKA_BROKERCONNECT: kafka:29092
 
-  consumer:
-    image: kconsumer
+  producer:
+    image: bordallog/kafka-producer
     networks: 
       - broker-kafka
     depends_on: 
       - kafka
+
+  # consumer:
+  #   image: bordallog/kafka-consumer
+  #   networks: 
+  #     - broker-kafka
+  #   depends_on: 
+  #     - kafka
 
 networks: 
   broker-kafka:
